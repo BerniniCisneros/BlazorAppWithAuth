@@ -1,0 +1,67 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+@using Microsoft.AspNetCore.Http;
+@using Models
+@using Territorios.Data
+@using System.Security.Claims
+
+@inject TerritoryService TerritoryService
+@inject IHttpContextAccessor httpContextAccessor
+
+<h1>Asignación de territorios</h1>
+
+<TerritoriesContainer Territories="territories" OnAssignedToUpdated="HandleStatusUpdated">
+    @if (@user.IsInRole("Overseer"))
+    {
+        @foreach (var captain in captains)
+        {
+            <TerritoryList CaptainName="@(captain.Name)" />
+        }
+    }
+    else
+    {
+        @foreach (var captain in captains)
+        {
+            if (captain.Name.ToUpper().Contains(user.Identity.Name.ToUpper()))
+            {
+                <TerritoryList CaptainName="@(captain.Name)" />
+            }
+            
+        }
+    }
+
+</TerritoriesContainer>
+@if (@user.IsInRole("Overseer"))
+{
+    <hr />
+    <p>El último territorio asignado fue: <strong>@lastUpdatedTerritory</strong></p>
+    <hr />
+
+    @foreach (var territory in territories)
+    {
+        <p>@territory.Name - <strong>@territory.AssignedTo</strong></p>
+    }
+}
+
+
+@code {
+    Captain[] captains;
+    Territory[] territories;
+    string lastUpdatedTerritory = "";
+    ClaimsPrincipal user;
+
+    protected override void OnInitialized()
+    {
+        user = httpContextAccessor.HttpContext.User;
+        captains = TerritoryService.GetCaptains();
+        territories = TerritoryService.GetTerritories();
+    }
+
+    void HandleStatusUpdated(Territory territory)
+    {
+        lastUpdatedTerritory = territory.Name;
+        territories = TerritoryService.GetTerritories();
+    }
+}
