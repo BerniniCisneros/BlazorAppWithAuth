@@ -10,5 +10,6 @@ namespace Models
         public Block[] Blocks { get; set; }
         public DateTime? LasTimeWorked { get; set; }
         public string AssignedTo { get; set; }
+        public string Notes { get; set; }
     }
 }

@@ -130,6 +130,18 @@ namespace Territorios.Data
             var collection = GetTerritoriesCollection();
             collection.UpdateOne(filter, update);
         }
+
+        public void UpdateTerritoryNote(int territoryId, string notes)
+        {
+            var territory = this.GetAllTerritories().Where(s => s.TerritoryId == territoryId).Single();
+            territory.Notes = notes;
+            var filter = Builders<Territory>.Filter
+            .Eq(s => s.TerritoryId, territoryId);
+            var update = Builders<Territory>.Update
+                .Set(s => s.Notes, notes);
+            var collection = GetTerritoriesCollection();
+            collection.UpdateOne(filter, update);
+        }
     }
     public class TerritoryService
     {
@@ -160,6 +172,10 @@ namespace Territorios.Data
         public void AssignTerritory(int territoryId, string assignedTo)
         {
             repository.UpdateTerritoryAssignedTo(territoryId, assignedTo);
+        }
+        public void AddTerritoryNote(int territoryId, string note)
+        {
+            repository.UpdateTerritoryNote(territoryId, note);
         }
     }
 }

@@ -75,8 +75,20 @@ else
             <label>@block.WorkedOn</label>
             <br />
         }
+        <AuthorizeView>
+            <Authorized>
+                <textarea rows="20" placeholder="Escriba aquí cualquier nota sobre el territorio" @bind="selectedTerritory.Notes" @oninput="(e) => NotesChanged(e)">
+                </textarea>
+            </Authorized>
+            <NotAuthorized>
+                <textarea rows="20" placeholder="Escriba aquí cualquier nota sobre el territorio" @bind="selectedTerritory.Notes" @oninput="(e) => NotesChanged(e)" disabled>
+                </textarea>
+            </NotAuthorized>
+        </AuthorizeView>
+        
     }
 }
+
 
 @code {
     Captain[] captains;
@@ -114,6 +126,11 @@ else
         }
         TerritoryService.MarkTerritory(selectedTerritory.TerritoryId, currentBlock.Id, currentBlock.Worked);
         territories = TerritoryService.GetTerritories();
+    }
+
+    void NotesChanged(ChangeEventArgs e)
+    {
+        TerritoryService.AddTerritoryNote(selectedTerritory.TerritoryId, e.Value.ToString());
     }
 
     void ClearAllBlocks(EventArgs e)
