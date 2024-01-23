@@ -8,6 +8,7 @@
 @using System.Security.Claims
 
 @inject TerritoryService TerritoryService
+@inject MobileService MobileService
 @inject IHttpContextAccessor httpContextAccessor
 
 <h1>Asignación de territorios</h1>
@@ -24,7 +25,7 @@
     {
         @foreach (var captain in captains)
         {
-            if (captain.Name.ToUpper().Contains(user.Identity.Name.ToUpper()))
+            if (captain.AspNetUserName == @user.Identity.Name)
             {
                 <TerritoryList CaptainName="@(captain.Name)" />
             }
@@ -63,5 +64,7 @@
     {
         lastUpdatedTerritory = territory.Name;
         territories = TerritoryService.GetTerritories();
+        var captainMobile = captains.Where(w => w.Name == territory.AssignedTo).SingleOrDefault();
+        MobileService.SendMessageAsync($"Hola! El territorio {territory.Name} se te ha asignado", captainMobile.Mobile);
     }
 }

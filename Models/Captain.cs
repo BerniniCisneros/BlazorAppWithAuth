@@ -8,5 +8,7 @@ namespace Models
         public int CaptainId { get; set; }
         public string Name { get; set; }
         public bool Overseer { get; set; }
+        public string Mobile { get; set; }
+        public string AspNetUserName { get; set; }
     }
 }

@@ -4,7 +4,10 @@
 
 @using Territorios.Data
 @using Models
+@using System.Security.Claims
 @inject TerritoryService TerritoryService
+@inject MobileService MobileService
+@inject IHttpContextAccessor httpContextAccessor
 
 <h1>Territorios</h1>
 
@@ -55,7 +58,14 @@ else
             <label>@block.Id</label>
             <AuthorizeView>
                 <Authorized>
-                    <input type="checkbox" checked="@block.Worked" @onchange="(e) => CheckboxChanged(block, e)">
+                    @if(selectedTerritory.AssignedTo == @captains.Where(s => s.AspNetUserName == @context.User.Identity.Name).Single().Name)
+                    {
+                        <input type="checkbox" checked="@block.Worked" @onchange="(e) => CheckboxChanged(block, e)">
+                    }
+                    else
+                    {
+                        <input type="checkbox" checked="@block.Worked" @onchange="(e) => CheckboxChanged(block, e)" disabled>
+                    }
                 </Authorized>
                 <NotAuthorized>
                     <input type="checkbox" checked="@block.Worked" @onchange="(e) => CheckboxChanged(block, e)" disabled>
@@ -69,18 +79,23 @@ else
 }
 
 @code {
+    Captain[] captains;
     private Territory[]? territories;
     private Territory? selectedTerritory;
+    ClaimsPrincipal user;
+    string selectedId;
 
     protected override async Task OnInitializedAsync()
     {
         territories = TerritoryService.GetTerritories();
+        captains = TerritoryService.GetCaptains();
+        user = httpContextAccessor.HttpContext.User;
         selectedTerritory = territories[0];
     }
 
     void ChangeTerritory(ChangeEventArgs e)
     {
-        var selectedId = e.Value.ToString();
+        selectedId = e.Value.ToString();
         selectedTerritory = territories.Where(s => s.TerritoryId == int.Parse(selectedId)).Single();
     }
 
@@ -103,11 +118,12 @@ else
 
     void ClearAllBlocks(EventArgs e)
     {
-        foreach (var block in selectedTerritory.Blocks)
-        {
-            block.Worked = false;
-            block.WorkedOn = null;
-            TerritoryService.MarkTerritory(selectedTerritory.TerritoryId, block.Id, block.Worked);
-        }
+        TerritoryService.MarkAllBlocks(selectedTerritory.TerritoryId, false);
+        
+        var overseer = captains.Where(s => s.Overseer).Single();
+        TerritoryService.AssignTerritory(selectedTerritory.TerritoryId, overseer.Name);
+        territories = TerritoryService.GetTerritories();
+        selectedTerritory = territories.Where(s => s.TerritoryId == int.Parse(selectedId)).Single();
+        MobileService.SendMessageAsync($"Hola! El territorio {selectedTerritory.Name} se ha finalizado", overseer.Mobile);
     }
 }

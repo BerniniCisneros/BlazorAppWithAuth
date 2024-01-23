@@ -72,19 +72,43 @@ namespace Territorios.Data
 
         public void UpdateTerritory(int territoryId, int blockId, bool worked)
         {
-            var territory = this.GetAllTerritories().Where(s => s.TerritoryId == territoryId).Single();
+            var territory = GetAllTerritories().Where(s => s.TerritoryId == territoryId).Single();
             var blocks = territory.Blocks;
             var block = blocks.Where(s => s.Id == blockId).Single();
             block.Worked = worked;
 
             if (worked)
             {
-                territory.LasTimeWorked = DateTime.Now;
                 block.WorkedOn = DateTime.Now;
             }
             else
             {
                 block.WorkedOn = null;
+            }
+            var filter = Builders<Territory>.Filter
+            .Eq(s => s.TerritoryId, territoryId);
+            var update = Builders<Territory>.Update
+                .Set(s => s.LasTimeWorked, DateTime.Now)
+                .Set(s => s.Blocks, blocks);
+            var collection = GetTerritoriesCollection();
+            collection.UpdateOne(filter, update);
+        }
+
+        public void UpdateAllBlocks(int territoryId, bool worked)
+        {
+            var territory = GetAllTerritories().Where(s => s.TerritoryId == territoryId).Single();
+            var blocks = territory.Blocks;
+            foreach(var block in blocks)
+            {
+                if (worked)
+                {                    
+                    block.WorkedOn = DateTime.Now;
+                }
+                else
+                {
+                    block.WorkedOn = null;
+                }
+                block.Worked = worked;
             }
             var filter = Builders<Territory>.Filter
             .Eq(s => s.TerritoryId, territoryId);
@@ -126,6 +150,11 @@ namespace Territorios.Data
         public void MarkTerritory(int territoryId, int blockId, bool worked)
         {
             repository.UpdateTerritory(territoryId, blockId, worked);
+        }
+
+        public void MarkAllBlocks(int territoryId, bool worked)
+        {
+            repository.UpdateAllBlocks(territoryId, worked);
         }
 
         public void AssignTerritory(int territoryId, string assignedTo)

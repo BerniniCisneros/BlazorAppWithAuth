@@ -1,6 +1,7 @@
 ﻿using Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using RestSharp;
 
 const string connectionUri = "mongodb+srv://p00gz:Mistyn23.@emaily.r9zj8.mongodb.net/?retryWrites=true&w=majority";
 
@@ -1137,51 +1138,65 @@ Captain[] captains = new Captain[]
     {
         CaptainId = 1,
         Name = "Tito Esquivel",
-        Overseer = true
+        Overseer = true,
+        Mobile = "523328433860",
+        AspNetUserName = "tito"
     },
     new Captain
     {
         CaptainId = 2,
         Name = "Norberto Valdez",
-        Overseer = false
+        Overseer = false,
+        Mobile = "523313577912",
+        AspNetUserName = "norberto"
     },
     new Captain
     {
         CaptainId = 3,
         Name = "Alejandro Blanco",
-        Overseer = false
+        Overseer = false,
+        Mobile = "523310118415",
+        AspNetUserName = "alejandro"
     },
     new Captain
     {
         CaptainId = 4,
         Name = "Bernini Cisneros",
-        Overseer = false
+        Overseer = false,
+        Mobile = "523316035477",
+        AspNetUserName = "bernini"
     },
     new Captain
     {
         CaptainId = 5,
         Name = "Samuel Silva",
-        Overseer = false
+        Overseer = false,
+        Mobile = "523411395668",
+        AspNetUserName = "samuel"
     },
     new Captain
     {
         CaptainId = 6,
         Name = "Ángel Rentería",
-        Overseer = false
+        Overseer = false,
+        Mobile = "523322170858",
+        AspNetUserName = "angel"
     },
     new Captain
     {
         CaptainId = 7,
         Name = "Luis Fernando Valdez",
-        Overseer = false
+        Overseer = false,
+        Mobile = "523311577623",
+        AspNetUserName = "luis"
     }
 };
 
 // Send a ping to confirm a successful connection
 try
 {
-    client.GetDatabase("emaily").CreateCollection("Users");
-    /*//client.GetDatabase("emaily").CreateCollection("Territories");
+    //client.GetDatabase("emaily").CreateCollection("Users");
+    //client.GetDatabase("emaily").CreateCollection("Territories");
     var territoriesCollection = client.GetDatabase("emaily").GetCollection<Territory>("Territories");
     territoriesCollection.DeleteMany(new BsonDocument());
     territoriesCollection.InsertMany(Territories);
@@ -1193,7 +1208,28 @@ try
     captainsCollection.InsertMany(captains);
     //var result = client.GetDatabase("admin").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
     //Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
-    */
+    
+    /*string[] numbers = { "523323381846", "523312601177" };
+    foreach (string mobile in numbers)
+    {
+        string instanceId = "instance75647"; // your instanceId
+        string token = "gw0lz5kajyczjagb";         //instance Token
+        //string mobile = "523316035477";
+        string message = "Es temporada de dragones";
+        var url = "https://api.ultramsg.com/" + instanceId + "/messages/chat";
+        var client2 = new RestClient(url);
+        var request = new RestRequest(url, Method.Post);
+        request.AddHeader("content-type", "application/x-www-form-urlencoded");
+        request.AddParameter("token", token);
+        request.AddParameter("to", mobile);
+        request.AddParameter("body", message);
+
+
+        RestResponse response = await client2.ExecuteAsync(request);
+        var output = response.Content;
+        Console.WriteLine(output);
+    }*/
+    
 }
 catch (Exception ex)
 {

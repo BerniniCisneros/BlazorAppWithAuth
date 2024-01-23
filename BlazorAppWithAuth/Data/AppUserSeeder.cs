@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Models;
 
 namespace BlazorAppWithAuth.Data
 {
@@ -20,7 +21,18 @@ namespace BlazorAppWithAuth.Data
             }
 
             var captains = new ApplicationUser[]
-            {
+            {                
+                new ApplicationUser
+                {
+                    FirstName = "Norberto",
+                    LastName = "Valdez",
+                    Email = "admin@example.com",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    UserName = "norberto",
+                    NormalizedUserName = "NORBERTO",
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                },
                 new ApplicationUser
                 {
                     FirstName = "Alejandro",
@@ -28,12 +40,64 @@ namespace BlazorAppWithAuth.Data
                     Email = "admin@example.com",
                     NormalizedEmail = "ADMIN@EXAMPLE.COM",
                     UserName = "alejandro",
-                    NormalizedUserName = "ALEX",
+                    NormalizedUserName = "ALEJANDRO",
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                },
+                new ApplicationUser
+                {
+                    FirstName = "Bernini",
+                    LastName = "Cisneros",
+                    Email = "admin@example.com",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    UserName = "bernini",
+                    NormalizedUserName = "BERNINI",
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                },
+                new ApplicationUser
+                {
+                    FirstName = "Samuel",
+                    LastName = "Silva",
+                    Email = "admin@example.com",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    UserName = "samuel",
+                    NormalizedUserName = "SAMUEL",
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                },
+                new ApplicationUser
+                {
+                    FirstName = "Ángel",
+                    LastName = "Rentería",
+                    Email = "admin@example.com",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    UserName = "angel",
+                    NormalizedUserName = "ANGEL",
+                    EmailConfirmed = true,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                },
+                new ApplicationUser
+                {
+                    FirstName = "Luis Fernando",
+                    LastName = "Valdez",
+                    Email = "admin@example.com",
+                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                    UserName = "luis",
+                    NormalizedUserName = "LUIS",
                     EmailConfirmed = true,
                     SecurityStamp = Guid.NewGuid().ToString("D")
                 }
             };
-
+            
+            foreach (var user in captains)
+            {
+                var aspnetUser = await userManager.FindByNameAsync(user.UserName);
+                if (aspnetUser is not null)
+                {
+                    await userManager.DeleteAsync(aspnetUser);
+                }
+            }
             foreach (var user in captains)
             {
                 if (await userManager.FindByNameAsync(user.UserName) is not null) return;
@@ -60,7 +124,14 @@ namespace BlazorAppWithAuth.Data
                     SecurityStamp = Guid.NewGuid().ToString("D")
                 },
             };
-
+            foreach (var user in overseers)
+            {
+                var aspnetUser = await userManager.FindByNameAsync(user.UserName);
+                if (aspnetUser is not null)
+                {
+                    await userManager.DeleteAsync(aspnetUser);
+                }
+            }
             foreach (var user in overseers)
             {
                 if (await userManager.FindByNameAsync(user.UserName) is not null) return;
@@ -70,7 +141,7 @@ namespace BlazorAppWithAuth.Data
 
                 var result = await userManager.CreateAsync(user);
                 //assign all role to super admin
-                await userManager.AddToRolesAsync(await userManager.FindByNameAsync(user.UserName), roles);
+                await userManager.AddToRolesAsync(await userManager.FindByNameAsync(user.UserName), roles.Where(s => s != "Captain").Select(x => x.ToUpper()));
             }
 
         }
