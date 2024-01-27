@@ -152,12 +152,12 @@ namespace Territorios.Data
         }
         public Territory[] GetTerritories()
         {
-            return repository.GetAllTerritories();
+            return repository.GetAllTerritories().OrderBy(s => s.TerritoryId).ToArray();
         }
 
         public Captain[] GetCaptains()
         {
-            return repository.GetAllCaptains();
+            return repository.GetAllCaptains().OrderBy(s => s.CaptainId).ToArray();
         }
         public void MarkTerritory(int territoryId, int blockId, bool worked)
         {

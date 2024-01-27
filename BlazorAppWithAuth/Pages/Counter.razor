@@ -11,30 +11,49 @@
 @inject MobileService MobileService
 @inject IHttpContextAccessor httpContextAccessor
 
-<h1>Asignación de territorios</h1>
+@if (@user.IsInRole("Overseer"))
+{
+    <h1>Asignación de territorios</h1>
 
+    <span>Filtro: </span>
+    <input type="text" placeholder="Nombre del capitán" @bind="filter" @bind:event="oninput" />
+    
+}
+else
+{
+    <h1>Mis territorios asignados</h1>
+}
+<br />
+<br />
+<div class="upsidedown" style="overflow-x:auto; display:block; margin: 0 auto; max-width:1500px;float:left">
+    <div class="scrollbar">
 <TerritoriesContainer Territories="territories" OnAssignedToUpdated="HandleStatusUpdated">
     @if (@user.IsInRole("Overseer"))
     {
-        @foreach (var captain in captains)
+        <TerritoryList CaptainName="@(captains.Where(s => s.Overseer).Single().Name)" />
+        <div style="display:inline-block; width:20px"></div>
+        @foreach (var captain in filteredCaptains)
         {
             <TerritoryList CaptainName="@(captain.Name)" />
+                
         }
     }
     else
     {
-        @foreach (var captain in captains)
+        if (territories.Where(s => s.AssignedTo == (captains.Where(s => s.AspNetUserName == @user.Identity.Name).Single().Name)).Any())
+        {                
+            <TerritoryList CaptainName="@(captains.Where(s => s.AspNetUserName == @user.Identity.Name).Single().Name)" />
+        }
+        else
         {
-            if (captain.AspNetUserName == @user.Identity.Name)
-            {
-                <TerritoryList CaptainName="@(captain.Name)" />
-            }
-            
+            <h2>No tengo territorios asignados</h2>        
         }
     }
 
 </TerritoriesContainer>
-@if (@user.IsInRole("Overseer"))
+    </div>
+</div>
+@*@if (@user.IsInRole("Overseer"))
 {
     <hr />
     <p>El último territorio asignado fue: <strong>@lastUpdatedTerritory</strong></p>
@@ -44,20 +63,23 @@
     {
         <p>@territory.Name - <strong>@territory.AssignedTo</strong></p>
     }
-}
+}*@
 
 
 @code {
     Captain[] captains;
+    Captain[] filteredCaptains => captains.Where(s => s.Name.ToUpper().Contains(filter.ToUpper()) && !s.Overseer).ToArray();
     Territory[] territories;
     string lastUpdatedTerritory = "";
     ClaimsPrincipal user;
+    string filter = "";
 
     protected override void OnInitialized()
     {
         user = httpContextAccessor.HttpContext.User;
         captains = TerritoryService.GetCaptains();
         territories = TerritoryService.GetTerritories();
+        //filteredCaptains = captains.Where(s => s.Name.ToUpper().Contains(filter.ToString().ToUpper()) && !s.Overseer).ToArray();
     }
 
     void HandleStatusUpdated(Territory territory)
@@ -67,4 +89,9 @@
         var captainMobile = captains.Where(w => w.Name == territory.AssignedTo).SingleOrDefault();
         MobileService.SendMessageAsync($"Hola! El territorio {territory.Name} se te ha asignado", captainMobile.Mobile);
     }
+
+    //async Task FilterChanged(ChangeEventArgs e)
+    //{
+    //    filteredCaptains = captains.Where(s => s.Name.ToUpper().Contains(filter.ToUpper()) && !s.Overseer).ToArray();
+    //}
 }

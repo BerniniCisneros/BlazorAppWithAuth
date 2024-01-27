@@ -2,6 +2,7 @@
 
 <PageTitle>Territorios de la congregación La Venta del Astillero</PageTitle>
 
+@using System.Globalization;
 @using Territorios.Data
 @using Models
 @using System.Security.Claims
@@ -31,7 +32,8 @@ else
 
 @if (selectedTerritory != null)
 {
-    <p>Predicado por última vez: @(selectedTerritory.LasTimeWorked).</p>
+
+    <p>Predicado por última vez: @(selectedTerritory.LasTimeWorked.HasValue ? selectedTerritory.LasTimeWorked.Value.ToString("D", culture) : "Sin fecha")</p>
     <div>
         <img src="Images/Territorio@(selectedTerritory.TerritoryId).jpg" />
     </div>
@@ -52,8 +54,10 @@ else
             <button @onclick="ClearAllBlocks">Borrar todas</button>
             <br />
         }
+        <div style="display:flex; flex-flow: column wrap; max-height:200px">
         @foreach (var block in selectedTerritory.Blocks)
         {
+            <div style="min-width:200px">
             <label>Cuadra </label>
             <label>@block.Id</label>
             <AuthorizeView>
@@ -71,17 +75,19 @@ else
                     <input type="checkbox" checked="@block.Worked" @onchange="(e) => CheckboxChanged(block, e)" disabled>
                 </NotAuthorized>
             </AuthorizeView>
-            
-            <label>@block.WorkedOn</label>
+
+            <label>@(block.WorkedOn.HasValue ? @block.WorkedOn.Value.ToString("m", culture) : "")</label>
             <br />
+            </div>
         }
+        </div>
         <AuthorizeView>
             <Authorized>
-                <textarea rows="20" placeholder="Escriba aquí cualquier nota sobre el territorio" @bind="selectedTerritory.Notes" @oninput="(e) => NotesChanged(e)">
+                <textarea style="width:100%" rows="20" placeholder="Escriba aquí cualquier nota sobre el territorio" @bind="selectedTerritory.Notes" @oninput="(e) => NotesChanged(e)">
                 </textarea>
             </Authorized>
             <NotAuthorized>
-                <textarea rows="20" placeholder="Escriba aquí cualquier nota sobre el territorio" @bind="selectedTerritory.Notes" @oninput="(e) => NotesChanged(e)" disabled>
+                <textarea style="width:100%" rows="20" placeholder="Escriba aquí cualquier nota sobre el territorio" @bind="selectedTerritory.Notes" @oninput="(e) => NotesChanged(e)" disabled>
                 </textarea>
             </NotAuthorized>
         </AuthorizeView>
@@ -96,6 +102,7 @@ else
     private Territory? selectedTerritory;
     ClaimsPrincipal user;
     string selectedId;
+    CultureInfo culture = new CultureInfo("es-MX");
 
     protected override async Task OnInitializedAsync()
     {

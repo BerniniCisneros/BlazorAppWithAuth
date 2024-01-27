@@ -1,6 +1,6 @@
 ﻿<AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage">Hola, @context.User.Identity?.Name!</a>
+        <span>Hola, @context.User.Identity?.Name!</span>
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Cerrar sesión</button>
         </form>

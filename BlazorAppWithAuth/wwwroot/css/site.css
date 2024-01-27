@@ -65,13 +65,15 @@ a, .btn-link {
 
 .territories-container {
     display: flex;
-    justify-content: space-around;
+    /*justify-content: space-around;*/
 }
 
 .territory-status {
     display: flex;
     flex-direction: column;
     width: 312px;
+    min-width: 312px;
+    min-height: 800px;
 }
 
     .territory-status ul {
@@ -80,8 +82,10 @@ a, .btn-link {
 
 .dropzone {
     padding: 30px;
-    border: 1px dashed #75868a;
+    border: 1px solid #75868a;
+    border-radius: 5px;
     list-style: none;
+    margin:10px
 }
 
 .no-drop {
@@ -100,7 +104,8 @@ a, .btn-link {
     background: #5c6b7f;
     color: #ffffff;
     border-radius: 5px;
-    width: 250px;
+    width: 230px;
+    min-width: 230px;
 }
 
     .draggable:active {
@@ -163,6 +168,27 @@ a, .btn-link {
     .sidebar .collapse {
         /* Never collapse the sidebar for wide screens */
         display: block;
+    }
+
+    img {
+        padding: 0;
+        display: block;
+        margin: 0 auto;
+        max-height: 100%;
+        max-width: 100%;
+    }
+
+    .upsidedown, .scrollbar {
+        transform: rotateX(180deg);
+        -moz-transform: rotateX(180deg); /* Mozilla */
+        -webkit-transform: rotateX(180deg); /* Safari and Chrome */
+        -ms-transform: rotateX(180deg); /* IE 9+ */
+        -o-transform: rotateX(180deg); /* Opera */
+    }
+
+    hr.rounded {
+        border-top: 4px solid #bbb;
+        border-radius: 4px;
     }
 }
 

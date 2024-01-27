@@ -3,46 +3,48 @@
 <PageTitle>Weather forecast</PageTitle>
 
 @using BlazorAppWithAuth.Data
-@inject WeatherForecastService ForecastService
+@using Models;
+@using System.Globalization;
+@using Territorios.Data;
+@inject TerritoryService TerritoryService
 
-<h1>Weather forecast</h1>
+<h1>Consola</h1>
 
-<p>This component demonstrates fetching data from a service.</p>
+<p>Progreso en la cobertura del territorio.</p>
 
-@if (forecasts == null)
+@if (territories == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div>
+    @foreach (var territory in territories)
+    {
+        <div style="display:flex; flex-direction:row">
+            <div style="width:500px">
+                <span style="display:block">Territorio @(territory.Name)</span>
+                <span style="display:block">Asignado a @(territory.AssignedTo != null ? territory.AssignedTo : "Sin asignar")</span>
+                <span style="display:block">Predicado por última vez: @(territory.LasTimeWorked.HasValue ? territory.LasTimeWorked.Value.ToString("D", culture) : "Sin predicar aún")</span>
+            </div>
+            <div >
+                @foreach (var block in territory.Blocks.OrderByDescending(s => s.Worked))
+                {
+                    <input type="checkbox" checked="@block.Worked" style="display:inline"/>
+                }
+            </div>
+        </div>
+        <hr class="rounded">
+    }
+    </div>
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private Territory[]? territories;
+    CultureInfo culture = new CultureInfo("es-MX");
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        territories = TerritoryService.GetTerritories();
     }
 }
