@@ -35,7 +35,7 @@ else
 
     <p>Predicado por última vez: @(selectedTerritory.LasTimeWorked.HasValue ? selectedTerritory.LasTimeWorked.Value.ToString("D", culture) : "Sin fecha")</p>
     <div>
-        <img src="Images/Territorio@(selectedTerritory.TerritoryId).jpg" />
+        <img style="width:100%" src="Images/Territorio@(selectedTerritory.TerritoryId).jpg" />
     </div>
 }
 
@@ -51,10 +51,10 @@ else
     {
         if (selectedTerritory.Blocks.All(s => s.Worked))
         {
-            <button @onclick="ClearAllBlocks">Borrar todas</button>
+            <button @onclick="ClearAllBlocks">Terminar territorio</button>
             <br />
         }
-        <div style="display:flex; flex-flow: column wrap; max-height:200px">
+        <div style="display:flex; flex-flow: column wrap">
         @foreach (var block in selectedTerritory.Blocks)
         {
             <div style="min-width:200px">
@@ -81,6 +81,7 @@ else
             </div>
         }
         </div>
+        <p>Notas del territorio</p>
         <AuthorizeView>
             <Authorized>
                 <textarea style="width:100%" rows="20" placeholder="Escriba aquí cualquier nota sobre el territorio" @bind="selectedTerritory.Notes" @oninput="(e) => NotesChanged(e)">
@@ -101,7 +102,7 @@ else
     private Territory[]? territories;
     private Territory? selectedTerritory;
     ClaimsPrincipal user;
-    string selectedId;
+    string selectedId = "1";
     CultureInfo culture = new CultureInfo("es-MX");
 
     protected override async Task OnInitializedAsync()

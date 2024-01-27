@@ -71,8 +71,8 @@ a, .btn-link {
 .territory-status {
     display: flex;
     flex-direction: column;
-    width: 312px;
-    min-width: 312px;
+    width: 160px;
+    min-width: 160px;
     min-height: 800px;
 }
 
@@ -81,11 +81,11 @@ a, .btn-link {
     }
 
 .dropzone {
-    padding: 30px;
+    padding: 15px;
     border: 1px solid #75868a;
     border-radius: 5px;
     list-style: none;
-    margin:10px
+    margin:5px
 }
 
 .no-drop {
@@ -104,8 +104,8 @@ a, .btn-link {
     background: #5c6b7f;
     color: #ffffff;
     border-radius: 5px;
-    width: 230px;
-    min-width: 230px;
+    width: 120px;
+    min-width: 120px;
 }
 
     .draggable:active {
@@ -117,7 +117,8 @@ a, .btn-link {
 }
 
 .description {
-    font-size: 18px;
+    font-size: 16px;
+    text-align:center;
 }
 
 .last-updated {
@@ -174,7 +175,8 @@ a, .btn-link {
         padding: 0;
         display: block;
         margin: 0 auto;
-        max-height: 100%;
+        height: auto;
+        object-fit: scale-down;
         max-width: 100%;
     }
 

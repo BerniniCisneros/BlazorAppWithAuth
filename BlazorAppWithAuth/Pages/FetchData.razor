@@ -22,7 +22,7 @@ else
     @foreach (var territory in territories)
     {
         <div style="display:flex; flex-direction:row">
-            <div style="width:500px">
+            <div style="width:200px; max-width:200px; min-width:200px">
                 <span style="display:block">Territorio @(territory.Name)</span>
                 <span style="display:block">Asignado a @(territory.AssignedTo != null ? territory.AssignedTo : "Sin asignar")</span>
                 <span style="display:block">Predicado por última vez: @(territory.LasTimeWorked.HasValue ? territory.LasTimeWorked.Value.ToString("D", culture) : "Sin predicar aún")</span>
