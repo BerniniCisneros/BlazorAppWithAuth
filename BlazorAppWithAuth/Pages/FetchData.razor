@@ -10,34 +10,43 @@
 
 <h1>Consola</h1>
 
-<p>Progreso en la cobertura del territorio.</p>
+<AuthorizeView>
+    <Authorized>
+        <p>Progreso en la cobertura del territorio.</p>
 
-@if (territories == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <div>
-    @foreach (var territory in territories)
-    {
-        <div style="display:flex; flex-direction:row">
-            <div style="width:200px; max-width:200px; min-width:200px">
-                <span style="display:block">Territorio @(territory.Name)</span>
-                <span style="display:block">Asignado a @(territory.AssignedTo != null ? territory.AssignedTo : "Sin asignar")</span>
-                <span style="display:block">Predicado por última vez: @(territory.LasTimeWorked.HasValue ? territory.LasTimeWorked.Value.ToString("D", culture) : "Sin predicar aún")</span>
-            </div>
-            <div >
-                @foreach (var block in territory.Blocks.OrderByDescending(s => s.Worked))
+        @if (territories == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <div>
+                @foreach (var territory in territories)
                 {
-                    <input type="checkbox" checked="@block.Worked" style="display:inline"/>
+                    <div style="display:flex; flex-direction:row">
+                        <div style="width:200px; max-width:200px; min-width:200px">
+                            <span style="display:block">Territorio @(territory.Name)</span>
+                            <span style="display:block">Asignado a @(territory.AssignedTo != null ? territory.AssignedTo : "Sin asignar")</span>
+                            <span style="display:block">Predicado por última vez: @(territory.LasTimeWorked.HasValue ? territory.LasTimeWorked.Value.ToString("D", culture) : "Sin predicar aún")</span>
+                        </div>
+                        <div>
+                            @foreach (var block in territory.Blocks.OrderByDescending(s => s.Worked))
+                            {
+                                <input type="checkbox" checked="@block.Worked" style="display:inline" />
+                            }
+                        </div>
+                    </div>
+                    <hr class="rounded">
                 }
             </div>
-        </div>
-        <hr class="rounded">
-    }
-    </div>
-}
+        }
+    </Authorized>
+    <NotAuthorized>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+
 
 @code {
     private Territory[]? territories;

@@ -21,7 +21,7 @@ namespace BlazorAppWithAuth.Data
             }
 
             var captains = new ApplicationUser[]
-            {                
+            {
                 new ApplicationUser
                 {
                     FirstName = "Norberto",
@@ -89,6 +89,17 @@ namespace BlazorAppWithAuth.Data
                     SecurityStamp = Guid.NewGuid().ToString("D")
                 }
             };
+
+            var passwords = new Dictionary<string, string>()
+            {
+                { "tito", "titoLV123" },
+                { "norberto", "norberLV123" },
+                { "alejandro", "alexLV123" },
+                { "bernini", "polliLV123" },
+                { "samuel", "samLV123" },
+                { "angel", "angelLV123" },
+                { "luis", "luisfervalLV123" }
+            };
             
             foreach (var user in captains)
             {
@@ -102,7 +113,7 @@ namespace BlazorAppWithAuth.Data
             {
                 if (await userManager.FindByNameAsync(user.UserName) is not null) return;
                 var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user, "secret");
+                var hashed = password.HashPassword(user, passwords[user.UserName]);
                 user.PasswordHash = hashed;
 
                 var result = await userManager.CreateAsync(user);
@@ -136,7 +147,7 @@ namespace BlazorAppWithAuth.Data
             {
                 if (await userManager.FindByNameAsync(user.UserName) is not null) return;
                 var password = new PasswordHasher<ApplicationUser>();
-                var hashed = password.HashPassword(user, "secret");
+                var hashed = password.HashPassword(user, passwords[user.UserName]);
                 user.PasswordHash = hashed;
 
                 var result = await userManager.CreateAsync(user);

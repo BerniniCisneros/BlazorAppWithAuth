@@ -1115,20 +1115,6 @@ Territory[] Territories = new Territory[]
                         Worked = false,
                     }
                 }
-            },
-            new Territory
-            {
-                TerritoryId = 12,
-                Name = "Doce",
-                AssignedTo = "Tito Esquivel",
-                Blocks = Array.Empty<Block>()
-            },
-            new Territory
-            {
-                TerritoryId = 13,
-                Name = "Trece",
-                AssignedTo = "Tito Esquivel",
-                Blocks = Array.Empty<Block>()
             }
         };
 
