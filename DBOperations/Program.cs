@@ -1115,6 +1115,51 @@ Territory[] Territories = new Territory[]
                         Worked = false,
                     }
                 }
+            },
+            new Territory
+            {
+                TerritoryId = 12,
+                Name = "Doce",
+                AssignedTo = "Tito Esquivel",
+                Blocks = new Block[]
+                {
+                    new Block
+                    {
+                        Id = 1,
+                        WorkedOn = null,
+                        Worked = false,
+                    }
+                }
+            },
+            new Territory
+            {
+                TerritoryId = 13,
+                Name = "Trece",
+                AssignedTo = "Tito Esquivel",
+                Blocks = new Block[]
+                {
+                    new Block
+                    {
+                        Id = 1,
+                        WorkedOn = null,
+                        Worked = false,
+                    }
+                }
+            },
+            new Territory
+            {
+                TerritoryId = 14,
+                Name = "Catorce",
+                AssignedTo = "Tito Esquivel",
+                Blocks = new Block[]
+                {
+                    new Block
+                    {
+                        Id = 1,
+                        WorkedOn = null,
+                        Worked = false,
+                    }
+                }
             }
         };
 
@@ -1184,14 +1229,14 @@ try
     //client.GetDatabase("emaily").CreateCollection("Users");
     //client.GetDatabase("emaily").CreateCollection("Territories");
     var territoriesCollection = client.GetDatabase("emaily").GetCollection<Territory>("Territories");
-    territoriesCollection.DeleteMany(new BsonDocument());
-    territoriesCollection.InsertMany(Territories);
+    //territoriesCollection.DeleteMany(new BsonDocument());
+    territoriesCollection.InsertMany(Territories.Where(s => s.TerritoryId == 12));
     //var filter = Builders<Territory>.Filter
     //        .Eq(s => s., territoryId);
     //client.GetDatabase("emaily").CreateCollection("Capitanes");
-    var captainsCollection = client.GetDatabase("emaily").GetCollection<Captain>("Capitanes");
-    captainsCollection.DeleteMany(new BsonDocument());
-    captainsCollection.InsertMany(captains);
+    //var captainsCollection = client.GetDatabase("emaily").GetCollection<Captain>("Capitanes");
+    //captainsCollection.DeleteMany(new BsonDocument());
+    //captainsCollection.InsertMany(captains);
     //var result = client.GetDatabase("admin").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
     //Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
     
