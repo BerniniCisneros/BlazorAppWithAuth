@@ -19,7 +19,7 @@
     {
         var territory = Territories.SingleOrDefault(x => x.TerritoryId == Payload.TerritoryId);
 
-        if (territory != null)
+        if (territory != null && territory.AssignedTo != assignedTo)
         {
             territory.AssignedTo = assignedTo;
             territory.LasTimeWorked = DateTime.Now;
