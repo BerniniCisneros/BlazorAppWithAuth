@@ -2,6 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using RestSharp;
+using static MongoDB.Driver.WriteConcern;
 
 const string connectionUri = "mongodb+srv://p00gz:Mistyn23.@emaily.r9zj8.mongodb.net/?retryWrites=true&w=majority";
 
@@ -1228,18 +1229,25 @@ try
 {
     //client.GetDatabase("emaily").CreateCollection("Users");
     //client.GetDatabase("emaily").CreateCollection("Territories");
-    var territoriesCollection = client.GetDatabase("emaily").GetCollection<Territory>("Territories");
+    //var territoriesCollection = client.GetDatabase("emaily").GetCollection<Territory>("Territories");
     //territoriesCollection.DeleteMany(new BsonDocument());
-    territoriesCollection.InsertMany(Territories.Where(s => s.TerritoryId == 12));
+    //territoriesCollection.InsertMany(Territories.Where(s => s.TerritoryId == 12));
     //var filter = Builders<Territory>.Filter
     //        .Eq(s => s., territoryId);
     //client.GetDatabase("emaily").CreateCollection("Capitanes");
-    //var captainsCollection = client.GetDatabase("emaily").GetCollection<Captain>("Capitanes");
+    var captainsCollection = client.GetDatabase("emaily").GetCollection<Captain>("Capitanes");
+    var filter = Builders<Captain>.Filter
+            .Eq(s => s.CaptainId, 6);
+    var update = Builders<Captain>.Update
+    .Set(s => s.Name, "Manuel Robles")
+    .Set(s => s.Mobile, "524571064532")
+    .Set(s => s.AspNetUserName, "manuel");
+    captainsCollection.UpdateOne(filter, update);
     //captainsCollection.DeleteMany(new BsonDocument());
     //captainsCollection.InsertMany(captains);
     //var result = client.GetDatabase("admin").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
     //Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
-    
+
     /*string[] numbers = { "523323381846", "523312601177" };
     foreach (string mobile in numbers)
     {
@@ -1260,7 +1268,7 @@ try
         var output = response.Content;
         Console.WriteLine(output);
     }*/
-    
+
 }
 catch (Exception ex)
 {

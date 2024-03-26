@@ -68,12 +68,12 @@ namespace BlazorAppWithAuth.Data
                 },
                 new ApplicationUser
                 {
-                    FirstName = "Ángel",
-                    LastName = "Rentería",
+                    FirstName = "Manuel",
+                    LastName = "Robles",
                     Email = "admin@example.com",
                     NormalizedEmail = "ADMIN@EXAMPLE.COM",
-                    UserName = "angel",
-                    NormalizedUserName = "ANGEL",
+                    UserName = "manuel",
+                    NormalizedUserName = "MANUEL",
                     EmailConfirmed = true,
                     SecurityStamp = Guid.NewGuid().ToString("D")
                 },
@@ -97,7 +97,7 @@ namespace BlazorAppWithAuth.Data
                 { "alejandro", "alexLV123" },
                 { "bernini", "polliLV123" },
                 { "samuel", "samLV123" },
-                { "angel", "angelLV123" },
+                { "manuel", "manuelLV123" },
                 { "luis", "luisfervalLV123" }
             };
             
